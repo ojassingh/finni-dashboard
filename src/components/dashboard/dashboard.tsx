@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import { DataTable } from "./data-table";
 import { columns, Customer } from "./columns";
+import { AddPatientDialog } from "./add-patient-dialog";
+
 async function getData(): Promise<Customer[]> {
   return [
     {
@@ -102,10 +102,7 @@ export async function Dashboard() {
             Here&apos;s a quick overview of your patients.
           </p>
         </div>
-        <Button>
-          <PlusIcon className="w-4 h-4 mr-2" />
-          Add Patient
-        </Button>
+        <AddPatientDialog />
       </div>
       <div className="mt-10">
         <DataTable columns={columns} data={data} />

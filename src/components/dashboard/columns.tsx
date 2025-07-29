@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { format } from "date-fns";
 
 export type Customer = {
   id: string;
@@ -53,17 +54,7 @@ export const columns: ColumnDef<Customer>[] = [
     id: "name",
     accessorFn: (row) =>
       `${row.firstName} ${row.middleName} ${row.lastName}`.trim(),
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "Name",
     cell: ({ row }) => (
       <div>
         {`${row.original.firstName} ${row.original.middleName} ${row.original.lastName}`.trim()}
@@ -72,16 +63,10 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "dateOfBirth",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Date of Birth
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
+    header: "Date of Birth",
+    cell: ({ row }) => {
+      const dateOfBirth = row.getValue("dateOfBirth") as string;
+      return <div>{format(new Date(dateOfBirth), "MMM d, yyyy")}</div>;
     },
   },
   {
@@ -89,7 +74,6 @@ export const columns: ColumnDef<Customer>[] = [
     header: "Status",
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
-
       return getStatusBadge(status);
     },
   },
