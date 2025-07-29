@@ -15,6 +15,7 @@ import {
 import { format } from "date-fns";
 import { Patient } from "@/types";
 import { toast } from "sonner";
+import Link from "next/link";
 
 export const columns: ColumnDef<Patient>[] = [
   {
@@ -47,9 +48,11 @@ export const columns: ColumnDef<Patient>[] = [
       `${row.firstName} ${row.middleName} ${row.lastName}`.trim(),
     header: "Name",
     cell: ({ row }) => (
-      <div>
-        {`${row.original.firstName} ${row.original.middleName} ${row.original.lastName}`.trim()}
-      </div>
+      <Link href={`/patients/${row.original.id}`}>
+        <div>
+          {`${row.original.firstName} ${row.original.middleName} ${row.original.lastName}`.trim()}
+        </div>
+      </Link>
     ),
   },
   {
@@ -69,8 +72,12 @@ export const columns: ColumnDef<Patient>[] = [
     },
   },
   {
-    accessorKey: "address",
+    accessorKey: "street",
     header: "Address",
+    cell: ({ row }) => {
+      const address = row.original;
+      return <p>{`${address.street}, ${address.city}, ${address.state} ${address.zip}`}</p>;
+    },
   },
   {
     id: "actions",
