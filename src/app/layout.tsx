@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,10 +20,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} antialiased`}
-      >
-        {children}
+      <body className={`${inter.className} antialiased w-full h-full`}>
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="w-full h-full">
+            {children}
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );
