@@ -4,9 +4,13 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import finni from "@/../public/finni-logo.svg";
 import Image from "next/image";
+import { Activity, HomeIcon, Users } from "lucide-react";
 
 export function AppSidebar() {
   return (
@@ -21,8 +25,20 @@ export function AppSidebar() {
         />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup />
-        <SidebarGroup />
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton className="font-medium tracking-tight">
+                <Activity /> Overview
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton className="font-medium tracking-tight">
+                <Users /> Patients
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>

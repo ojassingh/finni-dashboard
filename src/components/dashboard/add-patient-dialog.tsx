@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PlusIcon } from "lucide-react";
 
 export function AddPatientDialog() {
@@ -57,6 +57,12 @@ export function AddPatientDialog() {
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a status" />
                   </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="onboarding">Onboarding</SelectItem>
+                    <SelectItem value="inquiry">Inquiry</SelectItem>
+                    <SelectItem value="churned">Churned</SelectItem>
+                  </SelectContent>
                 </Select>
               </div>
             </div>
