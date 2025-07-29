@@ -24,17 +24,17 @@ export async function addPatient(patient: Patient) {
   return result;
 }
 
-export async function updatePatient(id: string, patient: PatientUpdateDTO) {
+export async function updatePatient(id: number, patient: PatientUpdateDTO) {
   const result = await db.update(patients).set(patient).where(eq(patients.id, id));
   return result;
 }
 
-export async function deletePatient(id: string) {
+export async function deletePatient(id: number) {
   const result = await db.delete(patients).where(eq(patients.id, id));
   return result;
 }
 
-export async function getPatient(id: string) {
+export async function getPatient(id: number) {
   const result = await db.select().from(patients).where(eq(patients.id, id));
   return result;
 }

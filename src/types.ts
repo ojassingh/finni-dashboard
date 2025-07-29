@@ -13,7 +13,7 @@ export interface EmergencyContact {
 }
 
 export interface Patient {
-  id: string;
+  id: number;
   firstName: string;
   middleName: string;
   lastName: string;
