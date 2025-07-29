@@ -1,3 +1,4 @@
+"use client";
 import {
   Sidebar,
   SidebarContent,
@@ -10,7 +11,10 @@ import {
 } from "@/components/ui/sidebar";
 import finni from "@/../public/finni-logo.svg";
 import Image from "next/image";
-import { Activity, HomeIcon, Users } from "lucide-react";
+import { Activity, HeartHandshake, Mail, Sparkles, Users } from "lucide-react";
+import { AddPatientDialog } from "../app/patients/add-patient-dialog";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export function AppSidebar() {
   return (
@@ -24,23 +28,58 @@ export function AppSidebar() {
           height={100}
         />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-4">
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton className="font-medium tracking-tight">
-                <Activity /> Overview
-              </SidebarMenuButton>
+              <AddPatientDialog />
+            </SidebarMenuItem>
+            <SidebarMenuItem className="mt-4">
+              <Link href="/">
+                <SidebarMenuButton className="font-medium tracking-tight">
+                  <Activity /> Overview
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton className="font-medium tracking-tight">
-                <Users /> Patients
-              </SidebarMenuButton>
+              <Link href="/patients">
+                <SidebarMenuButton className="font-medium tracking-tight">
+                  <Users /> Patients
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/ai">
+                <SidebarMenuButton className="font-medium tracking-tight">
+                  <Sparkles /> Finni AI
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter className="p-4">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <Link href="https://www.finnihealth.com/" target="_blank">
+              <SidebarMenuButton className="font-medium tracking-tight">
+                <HeartHandshake /> Learn more
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => {
+                navigator.clipboard.writeText("care@finnihealth.com");
+                toast.success("Email copied!");
+              }}
+              className="font-medium tracking-tight"
+            >
+              <Mail /> Contact us
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

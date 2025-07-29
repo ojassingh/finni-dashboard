@@ -13,18 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
+import { Patient } from "@/types";
+import { toast } from "sonner";
 
-export type Customer = {
-  id: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  dateOfBirth: string;
-  status: string;
-  address: string;
-};
-
-export const columns: ColumnDef<Customer>[] = [
+export const columns: ColumnDef<Patient>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -97,7 +89,10 @@ export const columns: ColumnDef<Customer>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(customer.id)}
+              onClick={() => {
+                navigator.clipboard.writeText(customer.email || "");
+                toast.success("Email copied to clipboard");
+              }}
             >
               Copy patient email
             </DropdownMenuItem>
