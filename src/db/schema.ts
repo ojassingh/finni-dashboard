@@ -4,7 +4,7 @@ import {
   pgTable,
   varchar,
   jsonb,
-  uuid,
+  integer,
 } from "drizzle-orm/pg-core";
 
 export const PatientStatus = pgEnum("patient_status", [
@@ -15,11 +15,12 @@ export const PatientStatus = pgEnum("patient_status", [
 ]);
 
 export const patients = pgTable("patients", {
-  id: uuid().primaryKey().defaultRandom(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   firstName: varchar({ length: 255 }).notNull(),
   middleName: varchar({ length: 255 }).notNull(),
   lastName: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull(),
+  phone: varchar({ length: 20 }).notNull(),
   dateOfBirth: date().notNull(),
   street: varchar({ length: 255 }).notNull(),
   city: varchar({ length: 100 }).notNull(),
@@ -27,4 +28,7 @@ export const patients = pgTable("patients", {
   zip: varchar({ length: 20 }).notNull(),
   status: PatientStatus(),
   conditions: jsonb().notNull().default("[]"),
+  allergies: jsonb().notNull().default("[]"),
+  emergencyContact: jsonb().notNull(),
+  recentActivity: jsonb().notNull().default("[]"),
 });
