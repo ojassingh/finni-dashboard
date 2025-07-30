@@ -21,25 +21,24 @@ export async function addPatient(patient: Patient) {
     emergencyContact: patient.emergencyContact,
     recentActivity: patient.recentActivity || [],
   });
-  return result;
+  return JSON.parse(JSON.stringify(result)) as Patient;
 }
 
 export async function updatePatient(id: number, patient: PatientUpdateDTO) {
   const result = await db.update(patients).set(patient).where(eq(patients.id, id));
-  return result;
+  return JSON.parse(JSON.stringify(result)) as Patient;
 }
 
 export async function deletePatient(id: number) {
-  const result = await db.delete(patients).where(eq(patients.id, id));
-  return result;
+  await db.delete(patients).where(eq(patients.id, id));
 }
 
 export async function getPatient(id: number) {
   const result = await db.select().from(patients).where(eq(patients.id, id));
-  return result;
+  return JSON.parse(JSON.stringify(result[0])) as Patient;
 }
 
 export async function getPatients() {
   const result = await db.select().from(patients);
-  return result;
+  return JSON.parse(JSON.stringify(result)) as Patient[];
 }
