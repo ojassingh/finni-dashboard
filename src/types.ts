@@ -48,3 +48,13 @@ export interface PatientUpdateDTO {
   emergencyContact?: EmergencyContact;
   recentActivity?: RecentActivity[];
 }
+
+export interface PatientsFilterDTO {
+  name?: string;
+  state?: string;
+  status?: PatientStatus;
+  condition?: string;
+  allergy?: string;
+  ageMin?: number;
+  ageMax?: number;
+}

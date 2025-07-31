@@ -1,7 +1,7 @@
 import db from "@/index";
-import { Patient, PatientUpdateDTO } from "@/types";
+import { Patient, PatientUpdateDTO, PatientsFilterDTO } from "@/types";
 import { patients } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, or, ilike, and, sql } from "drizzle-orm";
 
 export async function addPatient(patient: Patient) {
   const result = await db.insert(patients).values({
@@ -41,4 +41,58 @@ export async function getPatient(id: number) {
 export async function getPatients() {
   const result = await db.select().from(patients);
   return JSON.parse(JSON.stringify(result)) as Patient[];
+}
+
+export async function searchPatients(criteria: PatientsFilterDTO) {
+  const conditions = [];
+  
+  if (criteria.name) {
+    const nameWords = criteria.name.trim().split(/\s+/);
+    const nameConditions = nameWords.map(word => 
+      or(
+        ilike(patients.firstName, `%${word}%`),
+        ilike(patients.middleName, `%${word}%`),
+        ilike(patients.lastName, `%${word}%`)
+      )
+    );
+    conditions.push(and(...nameConditions));
+  }
+  
+  if (criteria.state) {
+    conditions.push(ilike(patients.state, `%${criteria.state}%`));
+  }
+  
+  if (criteria.status) {
+    conditions.push(eq(patients.status, criteria.status));
+  }
+  
+  if (criteria.condition) {
+    conditions.push(
+      sql`array_to_string(${patients.conditions}, ',') ILIKE ${'%' + criteria.condition + '%'}`
+    );
+  }
+  
+  if (criteria.allergy) {
+    conditions.push(
+      sql`array_to_string(${patients.allergies}, ',') ILIKE ${'%' + criteria.allergy + '%'}`
+    );
+  }
+  
+  if (criteria.ageMin) {
+    const maxBirthYear = new Date().getFullYear() - criteria.ageMin;
+    conditions.push(sql`EXTRACT(YEAR FROM ${patients.dateOfBirth}) <= ${maxBirthYear}`);
+  }
+  
+  if (criteria.ageMax) {
+    const minBirthYear = new Date().getFullYear() - criteria.ageMax;
+    conditions.push(sql`EXTRACT(YEAR FROM ${patients.dateOfBirth}) >= ${minBirthYear}`);
+  }
+  
+  const results = await db
+    .select()
+    .from(patients)
+    .where(conditions.length > 0 ? and(...conditions) : undefined)
+    .limit(10);
+
+  return JSON.parse(JSON.stringify(results)) as Patient[];
 }

@@ -5,6 +5,7 @@ import {
   varchar,
   jsonb,
   integer,
+  text,
 } from "drizzle-orm/pg-core";
 
 export const PatientStatus = pgEnum("patient_status", [
@@ -27,8 +28,8 @@ export const patients = pgTable("patients", {
   state: varchar({ length: 100 }).notNull(),
   zip: varchar({ length: 20 }).notNull(),
   status: PatientStatus(),
-  conditions: jsonb().notNull().default("[]"),
-  allergies: jsonb().notNull().default("[]"),
+  conditions: text("conditions").array(),
+  allergies: text("allergies").array(),
   emergencyContact: jsonb().notNull(),
   recentActivity: jsonb().notNull().default("[]"),
 });

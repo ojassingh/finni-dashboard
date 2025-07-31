@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased w-full h-full`}>
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full h-full">{children}</main>
+          <main className="w-full h-screen">{children}</main>
           <Toaster/>
         </SidebarProvider>
       </body>

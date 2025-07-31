@@ -12,7 +12,6 @@ import {
 import finni from "@/../public/finni-logo.svg";
 import Image from "next/image";
 import { Activity, HeartHandshake, Mail, Sparkles, Users } from "lucide-react";
-import { AddPatientDialog } from "../app/patients/add-patient-dialog";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -28,13 +27,10 @@ export function AppSidebar() {
           height={100}
         />
       </SidebarHeader>
-      <SidebarContent className="px-4">
+      <SidebarContent className="px-2">
         <SidebarGroup>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <AddPatientDialog />
-            </SidebarMenuItem>
-            <SidebarMenuItem className="mt-4">
+            <SidebarMenuItem className="">
               <Link href="/">
                 <SidebarMenuButton className="font-medium tracking-tight">
                   <Activity /> Overview
