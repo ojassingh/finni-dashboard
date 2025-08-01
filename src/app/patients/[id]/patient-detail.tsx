@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { User, Mail, MapPin, Calendar, Phone, Activity, AlertCircle } from "lucide-react"
-import { Patient, PatientStatus } from "@/types";
+import { Patient } from "@/types";
 import { calculateAge } from "@/utils/get-age";
+import { getStatusColor, getStatusIcon } from "@/utils/get-status";
 
 interface PatientDetailProps {
   patientPromise: Promise<Patient>;
@@ -47,10 +48,10 @@ export function PatientDetail({ patientPromise }: PatientDetailProps) {
               <div className="flex h-16 w-16 bg-background items-center justify-center rounded-full">
                 <User className="h-8 w-8" />
               </div>
-              <div>
-                <h2 className="text-2xl font-bold">{fullName || "Unknown Patient"}</h2>
+              <div className="grid gap-1">
+                <h2 className="text-xl font-medium tracking-tight">{fullName || "Unknown Patient"}</h2>
                 <p>Patient ID: #{patientData.id || "N/A"}</p>
-                <div className="mt-2 flex items-center space-x-4 text-sm">
+                <div className=" flex items-center space-x-4 text-sm">
                   {age !== null ? (
                     <>
                       <span className="flex items-center">
@@ -66,7 +67,8 @@ export function PatientDetail({ patientPromise }: PatientDetailProps) {
                 </div>
               </div>
             </div>
-            <Badge className="text-sm">
+            <Badge variant="outline" className="gap-2">
+              <span className={getStatusColor(patientData.status)}>{getStatusIcon(patientData.status)}</span>
               {patientData.status || "Unknown"}
             </Badge>
           </div>

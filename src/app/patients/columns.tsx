@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { format } from "date-fns";
 import { Patient } from "@/types";
 import Link from "next/link";
-import { getStatusIcon } from "@/utils/get-status";
+import { getStatusColor, getStatusIcon } from "@/utils/get-status";
 import { Badge } from "@/components/ui/badge";
 import { PatientActionsDropdown } from "./patient-actions-dropdown";
 
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Patient>[] = [
     header: "Status",
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
-      return <Badge>{getStatusIcon(status)} {status}</Badge>;
+      return <Badge variant="outline" className="gap-2"><span className={getStatusColor(status)}>{getStatusIcon(status)}</span> {status}</Badge>;
     },
   },
   {

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { PatientCard } from "./patient-card";
-import { Send, Bot, Users, MapPin, Heart, FileText, Dot } from "lucide-react";
+import { Send, Bot, Users, MapPin, Heart, FileText, Dot, Info } from "lucide-react";
 import { MemoizedMarkdown } from "./memoized-markdown";
 import { Patient } from "@/types";
 
@@ -47,10 +47,14 @@ export function Chat() {
   };
 
   return (
-    <div className="w-full relative h-screen">
-      <div className="border-b p-4">
-        <p className="text-lg font-medium tracking-tighter flex items-center gap-2">
+    <div className="w-full relative min-h-screen">
+      <div className="border-b sticky top-0 bg-background/50 backdrop-blur-sm px-4 py-3 flex items-center justify-between">
+        <p className=" font-medium tracking-tighter flex items-center gap-2">
           <Bot className="size-5" /> Finni AI
+        </p>
+        <p className="text-xs text-muted-foreground flex items-center gap-2">
+          <Info className="size-3" />
+          Search results are limited to 10 items to prevent context overload.
         </p>
       </div>
       <div className="overflow-y-auto pb-40">
