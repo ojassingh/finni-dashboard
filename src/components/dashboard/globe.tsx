@@ -25,20 +25,15 @@ const createGlobeConfig = (activeStateId: string | null, theme: string | undefin
     }))
   );
 
-  const isDark = theme === 'dark';
 
   return {
     devicePixelRatio: 2,
-    dark: isDark ? 0.8 : 0.3,
+    dark:  0.8,
     diffuse: 1,
     mapSamples: 32000,
-    mapBrightness: isDark ? 4 : 6,
-    baseColor: isDark 
-      ? ([0.2, 0.2, 0.2] as [number, number, number])
-      : ([0.8, 0.8, 0.8] as [number, number, number]),
-    markerColor: isDark 
-      ? ([0.5, 0.5, 0.5] as [number, number, number])
-      : ([0.3, 0.3, 0.3] as [number, number, number]),
+    mapBrightness: 4,
+    baseColor: [0.2, 0.2, 0.2] as [number, number, number],
+    markerColor: [0.5, 0.5, 0.5] as [number, number, number],
     glowColor: [0, 0, 0] as [number, number, number],
     markers: markers.map((marker) => {
       const isActive = marker.id === activeStateId;
@@ -46,10 +41,8 @@ const createGlobeConfig = (activeStateId: string | null, theme: string | undefin
         ...marker,
         size: 0.03,
         color: isActive
-          ? ([1, 0.8, 0.3] as [number, number, number])
-          : isDark 
-            ? ([0.5, 0.5, 0.5] as [number, number, number])
-            : ([0.4, 0.4, 0.4] as [number, number, number]),
+          ? ([0.71, 0.6, 0.3] as [number, number, number])
+          : ([0.4, 0.4, 0.4] as [number, number, number]),
       };
     }),
     onRender: () => {},
@@ -144,7 +137,7 @@ export function Globe({ className }: { className?: string }) {
   }, [activeStateId, theme]);
 
   return (
-    <div className="flex flex-col md:flex-row overflow-hidden max-h-[300px] items-start gap-8">
+    <div className="flex flex-col md:flex-row overflow-hidden max-h-[20rem] items-start gap-8">
       <div className="px-6">
         <p className="text-sm mt-4 text-muted-foreground">
           Stats in popular states:
@@ -164,7 +157,7 @@ export function Globe({ className }: { className?: string }) {
         </div>
       </div>
       <div
-        className={cn("w-full max-w-lg h-full relative", className)}
+        className={cn("w-full max-w-lg relative", className)}
         style={{ aspectRatio: 1 }}
       >
         <canvas

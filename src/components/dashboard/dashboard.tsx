@@ -1,13 +1,15 @@
 import React from "react";
 import { Globe } from "./globe";
-import { Card } from "../ui/card";
+import { BentoCards } from "./bento-cards";
+import { ChartArea } from "./chart-area";
+import { RecentActivity } from "./recent-activity";
 
 export async function Dashboard() {
   return (
     <div className="p-10 min-h-screen">
       <div className="flex w-full justify-between items-start">
         <div>
-          <h1 className="text-2xl tracking-tighter font-medium">
+          <h1 className="text-3xl tracking-tighter font-medium">
             Hey, welcome back!
           </h1>
           <p className="text-muted-foreground mt-2">
@@ -17,19 +19,8 @@ export async function Dashboard() {
       </div>
 
       <div className="grid grid-cols-6 gap-4 mt-10">
-        <div id="analytics-bento" className="col-span-3 grid grid-cols-2 gap-4">
-          <Card className="h-full w-full p-10">
-            <p>Hello</p>
-          </Card>
-          <Card className="h-full w-full p-10">
-            <p>Hello</p>
-          </Card>
-          <Card className="h-full w-full p-10">
-            <p>Hello</p>
-          </Card>
-          <Card className="h-full w-full p-10">
-            <p>Hello</p>
-          </Card>
+        <div className="col-span-3">
+          <BentoCards />
         </div>
         <div
           id="map-chart"
@@ -46,6 +37,14 @@ export async function Dashboard() {
           <Globe />
         </div>
       </div>
+             <div className="mt-4 grid grid-cols-6 gap-4">
+         <div className="col-span-4">
+           <ChartArea />
+         </div>
+         <div className="col-span-2">
+           <RecentActivity />
+         </div>
+       </div>
     </div>
   );
 }
