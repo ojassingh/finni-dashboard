@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 import { useState } from "react"
-
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -32,8 +31,10 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select"
-import { PlusIcon, X } from "lucide-react"
+import { PlusIcon, Loader2 } from "lucide-react"
 import { addPatient } from "@/actions/patients"
+import { PatientStatus } from "@/types"
+import { useRouter } from "next/navigation"
 
 const FormSchema = z.object({
   firstName: z.string().min(2, {
@@ -64,7 +65,7 @@ const FormSchema = z.object({
   zip: z.string().min(5, {
     message: "ZIP code must be at least 5 characters.",
   }),
-  status: z.enum(["Inquiry", "Onboarding", "Active", "Churned"]),
+  status: z.enum(Object.values(PatientStatus)),
   conditions: z.string().optional(),
   allergies: z.string().optional(),
   emergencyContactName: z.string().min(2, {
@@ -81,7 +82,7 @@ const FormSchema = z.object({
 export function AddPatientDialog() {
   const [open, setOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
+  const router = useRouter()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -95,7 +96,7 @@ export function AddPatientDialog() {
       city: "",
       state: "",
       zip: "",
-      status: "Inquiry",
+      status: PatientStatus.Inquiry,
       conditions: "",
       allergies: "",
       emergencyContactName: "",
@@ -109,7 +110,6 @@ export function AddPatientDialog() {
     
     try {
       const patientData = {
-        id: 0,
         firstName: data.firstName,
         middleName: data.middleName || "",
         lastName: data.lastName,
@@ -121,16 +121,17 @@ export function AddPatientDialog() {
         state: data.state,
         zip: data.zip,
         status: data.status,
-                 conditions: data.conditions ? data.conditions.split(',').map((c: string) => c.trim()) : [],
-         allergies: data.allergies ? data.allergies.split(',').map((a: string) => a.trim()) : [],
+        conditions: data.conditions ? data.conditions.split(',').map((c: string) => c.trim()) : [],
+        allergies: data.allergies ? data.allergies.split(',').map((a: string) => a.trim()) : [],
         emergencyContact: {
           name: data.emergencyContactName,
           relationship: data.emergencyContactRelationship,
           phone: data.emergencyContactPhone,
         },
-        recentActivity: [], 
       }
-      console.log(patientData)
+      
+      await addPatient(patientData)
+      router.refresh()
       toast.success("Patient added successfully!")
       form.reset()
       setOpen(false)
@@ -146,7 +147,7 @@ export function AddPatientDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <PlusIcon className="w-4 h-4 mr-2" />
+          <PlusIcon className="w-4 h-4" />
           Add Patient
         </Button>
       </DialogTrigger>
@@ -160,7 +161,6 @@ export function AddPatientDialog() {
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Personal Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Personal Information</h3>
               
@@ -262,10 +262,10 @@ export function AddPatientDialog() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Inquiry">Inquiry</SelectItem>
-                          <SelectItem value="Onboarding">Onboarding</SelectItem>
-                          <SelectItem value="Active">Active</SelectItem>
-                          <SelectItem value="Churned">Churned</SelectItem>
+                          <SelectItem value={PatientStatus.Inquiry}>Inquiry</SelectItem>
+                          <SelectItem value={PatientStatus.Onboarding}>Onboarding</SelectItem>
+                          <SelectItem value={PatientStatus.Active}>Active</SelectItem>
+                          <SelectItem value={PatientStatus.Churned}>Churned</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -426,7 +426,14 @@ export function AddPatientDialog() {
                 Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Adding..." : "Add Patient"}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Adding...
+                  </>
+                ) : (
+                  "Add Patient"
+                )}
               </Button>
             </div>
           </form>

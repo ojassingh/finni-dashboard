@@ -6,6 +6,7 @@ import {
   jsonb,
   integer,
   text,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const PatientStatus = pgEnum("patient_status", [
@@ -32,4 +33,5 @@ export const patients = pgTable("patients", {
   allergies: text("allergies").array(),
   emergencyContact: jsonb().notNull(),
   recentActivity: jsonb().notNull().default("[]"),
+  createdAt: timestamp().notNull().defaultNow(),
 });

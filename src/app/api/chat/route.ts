@@ -3,6 +3,7 @@ import { streamText, UIMessage, convertToModelMessages, tool, stepCountIs } from
 import { z } from 'zod';
 import { searchPatients } from '@/actions/patients';
 import { PatientsFilterDTO } from '@/types';
+import { PatientStatus } from '@/types';
 
 export const maxDuration = 30;
 
@@ -25,7 +26,7 @@ export async function POST(req: Request) {
         inputSchema: z.object({
           name: z.string().optional().describe('Patient name (first, middle, or last name)'),
           state: z.string().optional().describe('Abbreviation of state where patient lives (e.g. NY, CA, etc.)'),
-          status: z.enum(['Inquiry', 'Onboarding', 'Active', 'Churned']).optional().describe('Patient status'),
+          status: z.enum(Object.values(PatientStatus)).optional().describe('Patient status'),
           condition: z.string().optional().describe('Medical condition to search for'),
           allergy: z.string().optional().describe('Allergy to search for'),
           ageMin: z.number().optional().describe('Minimum age'),

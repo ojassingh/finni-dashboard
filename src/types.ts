@@ -1,6 +1,10 @@
 
-export type PatientStatus = "Inquiry" | "Onboarding" | "Active" | "Churned";
-
+export enum PatientStatus {
+  Inquiry = "Inquiry",
+  Onboarding = "Onboarding",
+  Active = "Active",
+  Churned = "Churned",
+}
 export interface RecentActivity {
   procedure?: string;
   date?: string;
@@ -29,6 +33,7 @@ export interface Patient {
   allergies?: string[];
   emergencyContact?: EmergencyContact;
   recentActivity?: RecentActivity[];
+  createdAt?: string;
 }
 
 export interface PatientUpdateDTO {
@@ -51,10 +56,12 @@ export interface PatientUpdateDTO {
 
 export interface PatientsFilterDTO {
   name?: string;
+  city?: string;
   state?: string;
   status?: PatientStatus;
   condition?: string;
   allergy?: string;
   ageMin?: number;
   ageMax?: number;
+  createdAt?: string;
 }

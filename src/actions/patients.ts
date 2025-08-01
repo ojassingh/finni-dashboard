@@ -1,27 +1,18 @@
+"use server";
+
 import db from "@/index";
 import { Patient, PatientUpdateDTO, PatientsFilterDTO } from "@/types";
 import { patients } from "@/db/schema";
-import { eq, or, ilike, and, sql } from "drizzle-orm";
+import { eq, or, ilike, and, sql, desc } from "drizzle-orm";
 
-export async function addPatient(patient: Patient) {
-  const result = await db.insert(patients).values({
-    firstName: patient.firstName,
-    middleName: patient.middleName || "",
-    lastName: patient.lastName || "",
-    email: patient.email,
-    phone: patient.phone,
-    dateOfBirth: patient.dateOfBirth || "",
-    street: patient.street || "",
-    city: patient.city || "",
-    state: patient.state || "",
-    zip: patient.zip || "",
-    status: patient.status,
-    conditions: patient.conditions || [],
-    allergies: patient.allergies || [],
-    emergencyContact: patient.emergencyContact,
-    recentActivity: patient.recentActivity || [],
-  });
-  return JSON.parse(JSON.stringify(result)) as Patient;
+export async function addPatient(patient: Omit<Patient, 'id'>) {
+  const insertData = {
+    ...patient,
+    emergencyContact: patient.emergencyContact || {},
+    createdAt: new Date(),
+  };
+  const result = await db.insert(patients).values(insertData).returning();
+  return JSON.parse(JSON.stringify(result[0])) as Patient;
 }
 
 export async function updatePatient(id: number, patient: PatientUpdateDTO) {
@@ -39,7 +30,7 @@ export async function getPatient(id: number) {
 }
 
 export async function getPatients() {
-  const result = await db.select().from(patients);
+  const result = await db.select().from(patients).orderBy(desc(patients.createdAt));
   return JSON.parse(JSON.stringify(result)) as Patient[];
 }
 
@@ -60,6 +51,14 @@ export async function searchPatients(criteria: PatientsFilterDTO) {
   
   if (criteria.state) {
     conditions.push(ilike(patients.state, `%${criteria.state}%`));
+  }
+
+  if (criteria.city) {
+    conditions.push(ilike(patients.city, `%${criteria.city}%`));
+  }
+
+  if (criteria.createdAt) {
+    conditions.push(sql`${patients.createdAt} >= ${criteria.createdAt}`);
   }
   
   if (criteria.status) {

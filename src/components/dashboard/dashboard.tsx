@@ -1,5 +1,4 @@
 import React from "react";
-import { AddPatientDialog } from "@/components/dashboard/add-patient-dialog";
 
 export async function Dashboard() {
   return (
@@ -13,8 +12,7 @@ export async function Dashboard() {
             Here&apos;s a quick overview of your patients.
           </p>
         </div>
-        <AddPatientDialog />
-      </div>
+        </div>
     </div>
   );
 }

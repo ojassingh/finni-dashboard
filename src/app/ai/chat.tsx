@@ -84,7 +84,7 @@ export function Chat() {
                 {message.role === "assistant" && (
                   <div className="flex items-center font-medium gap-2 text-sm">
                     <div
-                      className={`w-2 h-2 bg-orange-500 rounded-full ${status === "streaming" || status === "submitted" ? "animate-pulse" : ""}`}
+                      className={`w-2 h-2 bg-primary rounded-full ${status === "streaming" || status === "submitted" ? "animate-pulse" : ""}`}
                     />
                     Finni AI
                   </div>
@@ -95,8 +95,8 @@ export function Chat() {
                   <div
                     className={`flex items-center space-x-2 max-w-xl px-4 py-3 rounded-lg ${
                       message.role === "user"
-                        ? "bg-blue-500 text-white ml-auto"
-                        : "bg-white border shadow-sm"
+                        ? "bg-primary/80 text-white ml-auto"
+                        : " border shadow-sm"
                     }`}
                   >
                     <div className="space-y-1">
@@ -106,7 +106,7 @@ export function Chat() {
                             return (
                               <div
                                 key={`${message.id}-${i}`}
-                                className={`text-sm prose prose-sm max-w-none ${message.role === "user" ? "text-white" : "text-black"}`}
+                                className={`text-sm prose prose-sm prose-orange max-w-none ${message.role === "user" ? "text-white" : "text-black dark:text-white"}`}
                               >
                                 <MemoizedMarkdown
                                   content={part.text}
@@ -125,7 +125,7 @@ export function Chat() {
                             return (
                               <div key={`${message.id}-${i}`} className="">
                                 {toolResult && (
-                                  <div className="text-xs max-w-max bg-blue-50 p-2 rounded-md text-blue-700 mb-3">
+                                  <div className="text-xs max-w-max bg-secondary/50 p-2 rounded-md mb-3">
                                     <div className="font-medium">
                                       {status === "streaming" ||
                                       status === "submitted"

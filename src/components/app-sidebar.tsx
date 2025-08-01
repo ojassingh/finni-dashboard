@@ -14,6 +14,7 @@ import Image from "next/image";
 import { Activity, HeartHandshake, Mail, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { ModeToggle } from "./mode-toggle";
 
 export function AppSidebar() {
   return (
@@ -75,6 +76,7 @@ export function AppSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+        <ModeToggle/>
       </SidebarFooter>
     </Sidebar>
   );
