@@ -48,41 +48,42 @@ export function Chat() {
 
   return (
     <div className="w-full relative min-h-screen">
-      <div className="border-b sticky top-0 bg-background/50 backdrop-blur-sm px-4 py-3 flex items-center justify-between">
-        <p className=" font-medium tracking-tighter flex items-center gap-2">
+      <div className="border-b sticky top-0 bg-background/50 backdrop-blur-sm px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <p className="font-medium tracking-tighter flex items-center gap-2">
           <Bot className="size-5" /> Finni AI
         </p>
         <p className="text-xs text-muted-foreground flex items-center gap-2">
           <Info className="size-3" />
-          Search results are limited to 10 items to prevent context overload.
+          <span className="hidden sm:inline">Search results are limited to 10 items to prevent context overload.</span>
+          <span className="sm:hidden">Limited to 10 results</span>
         </p>
       </div>
-      <div className="overflow-y-auto pb-40">
+      <div className="overflow-y-auto pb-32 sm:pb-40">
         {messages.length === 0 ? (
-          <div className="flex mt-40 flex-col items-center justify-center h-full space-y-8">
+          <div className="flex mt-20 sm:mt-40 flex-col items-center justify-center h-full space-y-6 sm:space-y-8 px-4">
             <div className="text-center">
-              <h2 className="text-2xl tracking-tighter font-medium mb-2">
+              <h2 className="text-xl sm:text-2xl tracking-tighter font-medium mb-2">
                 Hey I&apos;m Finni, how can I help you?
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 max-w-2xl w-full">
               {commonQuestions.map((item, index) => (
                 <Card
                   key={index}
                   className="cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => handleQuestionClick(item.question)}
                 >
-                  <CardContent className="p-4 flex items-center space-x-3">
-                    <div className="text-primary">{item.icon}</div>
-                    <span className="text-sm">{item.question}</span>
+                  <CardContent className="p-3 sm:p-4 flex items-center space-x-3">
+                    <div className="text-primary flex-shrink-0">{item.icon}</div>
+                    <span className="text-sm leading-relaxed">{item.question}</span>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
         ) : (
-          <div className="space-y-4 mt-4 max-w-3xl mx-auto">
+          <div className="space-y-4 mt-4 max-w-3xl mx-auto px-4">
             {messages.map((message) => (
               <div key={message.id} className="space-y-2">
                 {message.role === "assistant" && (
@@ -97,13 +98,13 @@ export function Chat() {
                   className={`flex items-start space-x-2 ${message.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`flex items-center space-x-2 max-w-xl px-4 py-3 rounded-lg ${
+                    className={`flex items-center space-x-2 max-w-[85vw] sm:max-w-xl px-3 sm:px-4 py-3 rounded-lg ${
                       message.role === "user"
                         ? "bg-primary/80 text-white ml-auto"
                         : " border shadow-sm"
                     }`}
                   >
-                    <div className="space-y-1">
+                    <div className="space-y-1 w-full">
                       {message.parts.map((part, i) => {
                         switch (part.type) {
                           case "text":
@@ -127,7 +128,7 @@ export function Chat() {
                                   })
                                 : null;
                             return (
-                              <div key={`${message.id}-${i}`} className="">
+                              <div key={`${message.id}-${i}`} className="w-full">
                                 {toolResult && (
                                   <div className="text-xs max-w-max bg-secondary/50 p-2 rounded-md mb-3">
                                     <div className="font-medium">
@@ -167,7 +168,7 @@ export function Chat() {
         )}
       </div>
 
-      <div className="fixed ml-[10rem] sm:ml-[8rem] bottom-4 left-1/2 -translate-x-1/2 w-full px-4">
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-full px-4 sm:ml-[8rem] sm:left-0 sm:translate-x-0">
         <div className="bg-card/60 mx-auto max-w-3xl rounded-xl border p-2 shadow-lg backdrop-blur-sm">
           <form
             onSubmit={(e) => {
@@ -183,10 +184,10 @@ export function Chat() {
               value={input}
               placeholder="Ask about your patients..."
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 border-0 bg-transparent shadow-none outline-none focus-visible:ring-0 dark:bg-transparent"
+              className="flex-1 border-0 bg-transparent shadow-none outline-none focus-visible:ring-0 dark:bg-transparent text-sm sm:text-base"
             />
             <div className="flex items-center justify-end">
-              <Button type="submit" disabled={!input.trim()}>
+              <Button type="submit" disabled={!input.trim()} size="sm" className="sm:size-10">
                 <Send className="h-4 w-4" />
               </Button>
             </div>
