@@ -31,13 +31,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { AdvancedFilters } from "./advanced-filters"
+import { calculateAge } from "@/utils/get-age"
+import { Patient } from "@/types"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Patient, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -45,9 +48,56 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [advancedFilters, setAdvancedFilters] = React.useState<{
+    ageMin?: number
+    ageMax?: number
+    state?: string
+    status?: string
+    conditions?: string[]
+  }>({
+    ageMin: undefined,
+    ageMax: undefined,
+    state: undefined,
+    status: undefined,
+    conditions: []
+  })
+
+  const filteredData = React.useMemo(() => {
+    return data.filter((patient: Patient) => {
+      const age = calculateAge(patient.dateOfBirth)
+      
+      if (advancedFilters.ageMin !== undefined && age < advancedFilters.ageMin) {
+        return false
+      }
+      
+      if (advancedFilters.ageMax !== undefined && age > advancedFilters.ageMax) {
+        return false
+      }
+      
+      if (advancedFilters.state && patient.state !== advancedFilters.state) {
+        return false
+      }
+      
+      if (advancedFilters.status && patient.status !== advancedFilters.status) {
+        return false
+      }
+      
+      if (advancedFilters.conditions && advancedFilters.conditions.length > 0) {
+        const patientConditions = patient.conditions || []
+        const hasMatchingCondition = advancedFilters.conditions.some(condition =>
+          patientConditions.includes(condition)
+        )
+        if (!hasMatchingCondition) {
+          return false
+        }
+      }
+      
+      return true
+    })
+  }, [data, advancedFilters])
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -67,7 +117,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-4">
         <Input
           placeholder="Filter names..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -75,6 +125,10 @@ export function DataTable<TData, TValue>({
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
+        />
+        <AdvancedFilters
+          filters={advancedFilters}
+          onFiltersChange={setAdvancedFilters}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

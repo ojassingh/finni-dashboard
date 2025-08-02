@@ -145,12 +145,12 @@ export function Globe({
   }, [activeStateId, theme]);
 
   return (
-    <div className="flex flex-col md:flex-row overflow-hidden max-h-[20rem] items-start gap-8">
-      <div className="px-6">
-        <p className="text-sm mt-4 text-muted-foreground">
+    <div className="flex flex-col lg:flex-row overflow-hidden max-h-[20rem] items-start gap-4 lg:gap-8">
+      <div className="px-4 lg:px-6 order-2 lg:order-1">
+        <p className="text-sm mt-2 lg:mt-4 text-muted-foreground">
           Stats in popular states:
         </p>
-        <div className="grid gap-2 mt-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2 mt-2">
           {US_STATES.map((state) => (
             <Button
               className="max-w-max text-xs py-1 px-2"
@@ -165,7 +165,7 @@ export function Globe({
         </div>
       </div>
       <div
-        className={cn("w-full max-w-lg relative", className)}
+        className={cn("w-full max-w-lg relative order-1 lg:order-2", className)}
         style={{ aspectRatio: 1 }}
       >
         <canvas

@@ -77,7 +77,7 @@ const defaultData = {
 export function BentoCards({ selectedState }: { selectedState: string | null }) {
   const data = selectedState ? stateData[selectedState as keyof typeof stateData] : defaultData;
   return (
-    <div className="grid grid-cols-2 gap-4 h-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
       <Card className="@container/card bg-linear-to-b from-primary-dark to-primary">
         <CardHeader>
           <CardDescription>Total Patients</CardDescription>
