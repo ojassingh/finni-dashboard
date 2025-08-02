@@ -69,7 +69,7 @@ const generateMockData = (): DayDatum[] => {
 const mockData = generateMockData()
 
 const chartConfig = {
-  newPatients: { label: "Churned", color: "var(--color-primary)" },
+  newPatients: { label: "New", color: "var(--color-primary)" },
   churnedPatients: { label: "Churned", color: "var(--color-red)" },
   activeCount: { label: "Active", color: "var(--color-accent)" },
 } satisfies ChartConfig

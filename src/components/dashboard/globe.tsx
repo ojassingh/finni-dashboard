@@ -16,7 +16,7 @@ const US_STATES = [
   { name: "Illinois", location: [22.0, -89.0], id: "il" },
 ];
 
-const createGlobeConfig = (activeStateId: string | null, theme: string | undefined) => {
+const createGlobeConfig = (activeStateId: string | null) => {
   const markers = Object.entries(statePointData).flatMap(([id, locations]) =>
     locations.map((location) => ({
       location: location as [number, number],
@@ -49,7 +49,13 @@ const createGlobeConfig = (activeStateId: string | null, theme: string | undefin
   };
 };
 
-export function Globe({ className }: { className?: string }) {
+export function Globe({ 
+  className, 
+  onStateSelect 
+}: { 
+  className?: string;
+  onStateSelect?: (stateId: string | null) => void;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [activeStateId, setActiveStateId] = useState<string | null>(null);
   const focusRef = useRef([0, 0]);
@@ -65,7 +71,9 @@ export function Globe({ className }: { className?: string }) {
   };
 
   const selectState = (stateId: string) => {
-    setActiveStateId((prev) => (prev === stateId ? null : stateId));
+    const newState = activeStateId === stateId ? null : stateId;
+    setActiveStateId(newState);
+    onStateSelect?.(newState);
 
     const state = US_STATES.find((s) => s.id === stateId);
     if (state) {
@@ -96,7 +104,7 @@ export function Globe({ className }: { className?: string }) {
     }
 
     const globe = createGlobe(canvasRef.current!, {
-      ...createGlobeConfig(activeStateId, theme),
+      ...createGlobeConfig(activeStateId),
       width: width * 2,
       height: width * 2,
       phi: currentPhiRef.current,

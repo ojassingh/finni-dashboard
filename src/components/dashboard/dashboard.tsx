@@ -1,10 +1,13 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Globe } from "./globe";
 import { BentoCards } from "./bento-cards";
 import { ChartArea } from "./chart-area";
 import { RecentActivity } from "./recent-activity";
 
-export async function Dashboard() {
+export function Dashboard() {
+  const [selectedState, setSelectedState] = useState<string | null>(null);
   return (
     <div className="p-10 min-h-screen">
       <div className="flex w-full justify-between items-start">
@@ -20,7 +23,7 @@ export async function Dashboard() {
 
       <div className="grid grid-cols-6 gap-4 mt-10">
         <div className="col-span-3">
-          <BentoCards />
+          <BentoCards selectedState={selectedState} />
         </div>
         <div
           id="map-chart"
@@ -34,7 +37,7 @@ export async function Dashboard() {
               Geographic overview of patients across the United States
             </p>
           </div>
-          <Globe />
+          <Globe onStateSelect={setSelectedState} />
         </div>
       </div>
              <div className="mt-4 grid grid-cols-6 gap-4">
